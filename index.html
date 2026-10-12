@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Listverdict: a fair verdict on every listing change</title>
+  <meta name="description" content="A free tool for Etsy sellers. Check a listing, test a change, and get a fair keep-or-undo verdict that accounts for your whole shop.">
+  <meta name="theme-color" content="#1F7A4D">
+  <meta property="og:title" content="Listverdict">
+  <meta property="og:description" content="A fair verdict on every listing change. Free.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#app">Skip to the tool</a>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Listverdict home">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M4 22a12 12 0 0 1 24 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        <path d="M16 22l7-9" fill="none" stroke="#F6D36B" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="16" cy="22" r="3" fill="currentColor"/>
+      </svg>
+      <span>Listverdict</span>
+    </a>
+    <nav class="site-nav" aria-label="Tools">
+      <a href="#app" data-go="check">Check</a>
+      <a href="#app" data-go="test">Test</a>
+      <a href="#app" data-go="tests">My tests</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <h1>A fair verdict on every listing change.</h1>
+        <p class="lede">Changed a title or tags on Etsy? Find out if it actually helped. Listverdict compares the listing with the rest of your shop, so a busy week can't fool you. Free, and no shop login.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#app" data-go="test">Test a change</a>
+          <a class="btn btn-ghost" href="#app" data-go="check">Check a listing</a>
+        </div>
+      </div>
+
+      <figure class="hero-demo" aria-label="Example verdict">
+        <div class="demo-cards">
+          <div class="demo-card demo-old">
+            <span class="demo-tag">Before</span>
+            <p>Pink Icons for iPhone</p>
+          </div>
+          <div class="demo-card demo-new">
+            <span class="demo-tag">After</span>
+            <p>Pink <mark>iOS app</mark> icons, <mark>pastel aesthetic home screen</mark></p>
+          </div>
+        </div>
+        <div class="demo-meter">
+          <svg class="meter" viewBox="0 0 240 140" aria-hidden="true">
+            <path class="meter-zone zone-undo" d="M20 120 A100 100 0 0 1 90.8 24.4"/>
+            <path class="meter-zone zone-close" d="M97.5 22.6 A100 100 0 0 1 142.5 22.6"/>
+            <path class="meter-zone zone-keep" d="M149.2 24.4 A100 100 0 0 1 220 120"/>
+            <g class="needle" style="--deg: 42deg">
+              <line x1="120" y1="120" x2="120" y2="38"/>
+            </g>
+            <circle class="needle-hub" cx="120" cy="120" r="9"/>
+          </svg>
+          <div class="demo-result">
+            <strong>Keep it</strong>
+            <span>+14 points</span>
+          </div>
+        </div>
+        <figcaption>Example: the listing's views rose 24% while the rest of the shop rose 10%, so the change earned about 14 points.</figcaption>
+      </figure>
+    </section>
+
+    <section id="app" class="app" aria-label="Listverdict tools">
+      <!-- Email gate: shown until the visitor enters an email on this device -->
+      <div class="gate" id="gate">
+        <form class="gate-form" id="gate-form" novalidate>
+          <h2>Enter your email to start</h2>
+          <p>Listverdict is free. Your email unlocks the tools on this device.</p>
+          <label class="field-label" for="gate-email">Email</label>
+          <input class="input" id="gate-email" name="email" type="email" autocomplete="email" inputmode="email" required>
+          <label class="checkbox">
+            <input type="checkbox" id="gate-consent" name="consent">
+            <span>Email me tips and Listverdict updates</span>
+          </label>
+          <button class="btn btn-primary btn-wide" type="submit" id="gate-submit">Start using Listverdict</button>
+          <p class="form-error" id="gate-error" role="alert"></p>
+          <p class="fine">We only use your email for Listverdict, and you can unsubscribe at any time. <a href="privacy.html">Privacy</a></p>
+        </form>
+      </div>
+
+      <div class="tool" id="tool" hidden>
+        <div class="tabs" role="tablist" aria-label="Choose a tool">
+          <button class="tab" role="tab" id="tab-check" aria-controls="panel-check" data-tab="check">Check a listing</button>
+          <button class="tab" role="tab" id="tab-test" aria-controls="panel-test" data-tab="test">Test a change</button>
+          <button class="tab" role="tab" id="tab-tests" aria-controls="panel-tests" data-tab="tests">My tests <span class="tab-count" id="tests-count"></span></button>
+        </div>
+
+        <!-- Check a listing -->
+        <div class="panel" role="tabpanel" id="panel-check" aria-labelledby="tab-check">
+          <div class="check-grid">
+            <div class="check-inputs">
+              <div class="field">
+                <div class="field-head">
+                  <label class="field-label" for="check-title">Title</label>
+                  <span class="counter" id="check-title-count">0 / 140</span>
+                </div>
+                <textarea class="input" id="check-title" rows="3" placeholder="Paste your listing title"></textarea>
+              </div>
+              <div class="field">
+                <div class="field-head">
+                  <span class="field-label" id="check-tags-label">Tags</span>
+                  <span class="counter" id="check-tags-count">0 / 13</span>
+                </div>
+                <div class="chips" data-chips="check-tags" aria-labelledby="check-tags-label"></div>
+                <p class="hint">Press Enter or type a comma after each tag. You can paste them all at once.</p>
+              </div>
+              <div class="field">
+                <div class="field-head">
+                  <label class="field-label" for="check-desc">First lines of the description <span class="optional">(optional)</span></label>
+                  <span class="counter" id="check-desc-count">0</span>
+                </div>
+                <textarea class="input" id="check-desc" rows="3" placeholder="Paste the start of your description"></textarea>
+              </div>
+            </div>
+            <div class="check-results" aria-live="polite">
+              <h3 class="results-title" id="check-summary">Paste a title to see tips</h3>
+              <ul class="tips" id="check-tips"></ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Test a change (step by step) -->
+        <div class="panel" role="tabpanel" id="panel-test" aria-labelledby="tab-test" hidden>
+          <div class="progress" aria-hidden="true"><span class="progress-bar" id="wiz-bar"></span></div>
+          <p class="step-count" id="wiz-count">Step 1 of 5</p>
+
+          <form class="wizard" id="wizard" novalidate>
+            <fieldset class="step" data-step="1">
+              <legend class="step-title">Which listing are you changing?</legend>
+              <p class="step-help">A short name so you can find this test later.</p>
+              <input class="input input-big" id="wiz-name" type="text" maxlength="60" placeholder="e.g. Pink icon pack">
+            </fieldset>
+
+            <fieldset class="step" data-step="2" hidden>
+              <legend class="step-title">Paste the version that's live now</legend>
+              <p class="step-help">This is your backup. If the change doesn't work, you'll copy it back from here.</p>
+              <div class="field">
+                <div class="field-head">
+                  <label class="field-label" for="wiz-old-title">Current title</label>
+                  <span class="counter" id="wiz-old-title-count">0 / 140</span>
+                </div>
+                <textarea class="input" id="wiz-old-title" rows="3"></textarea>
+              </div>
+              <div class="field">
+                <div class="field-head">
+                  <span class="field-label" id="wiz-old-tags-label">Current tags <span class="optional">(optional)</span></span>
+                  <span class="counter" id="wiz-old-tags-count">0 / 13</span>
+                </div>
+                <div class="chips" data-chips="wiz-old-tags" aria-labelledby="wiz-old-tags-label"></div>
+              </div>
+            </fieldset>
+
+            <fieldset class="step" data-step="3" hidden>
+              <legend class="step-title">Write the new version</legend>
+              <p class="step-help">We've copied your current version in. Change only one or two things, so you know what made the difference.</p>
+              <div class="field">
+                <div class="field-head">
+                  <label class="field-label" for="wiz-new-title">New title</label>
+                  <span class="counter" id="wiz-new-title-count">0 / 140</span>
+                </div>
+                <textarea class="input" id="wiz-new-title" rows="3"></textarea>
+              </div>
+              <div class="field">
+                <div class="field-head">
+                  <span class="field-label" id="wiz-new-tags-label">New tags <span class="optional">(optional)</span></span>
+                  <span class="counter" id="wiz-new-tags-count">0 / 13</span>
+                </div>
+                <div class="chips" data-chips="wiz-new-tags" aria-labelledby="wiz-new-tags-label"></div>
+              </div>
+            </fieldset>
+
+            <fieldset class="step" data-step="4" hidden>
+              <legend class="step-title">Views from the 14 days before the change</legend>
+              <p class="step-help">In Etsy, open Shop Manager, then Stats. Set the date range to the last 14 days. Use views for both numbers.</p>
+              <div class="number-pair">
+                <div class="field">
+                  <label class="field-label" for="wiz-before-listing">This listing's views</label>
+                  <input class="input input-big" id="wiz-before-listing" type="number" inputmode="numeric" min="0" step="1">
+                </div>
+                <div class="field">
+                  <label class="field-label" for="wiz-before-shop">Whole shop's views</label>
+                  <input class="input input-big" id="wiz-before-shop" type="number" inputmode="numeric" min="0" step="1">
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="step" data-step="5" hidden>
+              <legend class="step-title">Now make the change on Etsy</legend>
+              <p class="step-help">Copy your new version into the listing, save it on Etsy, then start the test here.</p>
+              <div class="swap" id="wiz-swap"></div>
+            </fieldset>
+
+            <p class="form-error" id="wiz-error" role="alert"></p>
+            <div class="wizard-nav">
+              <button class="btn btn-ghost" type="button" id="wiz-back">Back</button>
+              <button class="btn btn-primary" type="submit" id="wiz-next">Next</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- My tests -->
+        <div class="panel" role="tabpanel" id="panel-tests" aria-labelledby="tab-tests" hidden>
+          <div class="tests-empty" id="tests-empty">
+            <h3>No tests yet</h3>
+            <p>Start one and it will appear here with a countdown to its verdict.</p>
+            <button class="btn btn-primary" type="button" data-tab-go="test">Test a change</button>
+          </div>
+          <ul class="tests" id="tests-list"></ul>
+          <div class="backup">
+            <p>Your tests are saved in this browser only. Download a backup to keep them safe or move them to another device.</p>
+            <div class="backup-actions">
+              <button class="btn btn-small" type="button" id="backup-download">Download backup</button>
+              <label class="btn btn-small btn-file">Restore backup<input type="file" id="backup-restore" accept="application/json,.json"></label>
+            </div>
+            <p class="form-error" id="backup-error" role="alert"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="fair">
+      <div class="fair-copy">
+        <h2>How the verdict stays fair</h2>
+        <p>Views rise and fall for reasons that have nothing to do with your change, like holidays, Etsy sales events or a slow week. So Listverdict also looks at the rest of your shop over the same days, and only credits your change with the difference.</p>
+      </div>
+      <div class="equation" aria-label="This listing up 24 percent, minus the rest of your shop up 10 percent, equals 14 points earned by your change">
+        <div class="eq-term"><span class="eq-num">+24%</span><span class="eq-label">this listing</span></div>
+        <span class="eq-op" aria-hidden="true">−</span>
+        <div class="eq-term"><span class="eq-num">+10%</span><span class="eq-label">rest of your shop</span></div>
+        <span class="eq-op" aria-hidden="true">=</span>
+        <div class="eq-term eq-answer"><span class="eq-num">+14</span><span class="eq-label">points your change earned</span></div>
+      </div>
+      <dl class="rules">
+        <div><dt class="rule-keep">Keep</dt><dd>The listing did at least 5 points better than the rest of the shop.</dd></div>
+        <div><dt class="rule-undo">Undo</dt><dd>It did at least 5 points worse. Your old version is ready to copy back.</dd></div>
+        <div><dt class="rule-close">Too close to call</dt><dd>Anything in between. Give it more time, or keep whichever you prefer.</dd></div>
+        <div><dt class="rule-data">Not enough data</dt><dd>Fewer than 50 views before the change. Small numbers swing too much to judge.</dd></div>
+      </dl>
+      <p class="fair-note">It's a fairer estimate, not a lab test. Things outside your shop, like a competitor's sale, can still move your views.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="footer-kofi" id="kofi-wrap" hidden>Listverdict is free. If it helped, you can <a id="kofi-link" href="#" target="_blank" rel="noopener">buy me a coffee</a>.</p>
+    <p class="footer-links"><a href="privacy.html">Privacy</a></p>
+    <p class="footer-legal">Listverdict is an independent tool and is not affiliated with or endorsed by Etsy, Inc. "Etsy" is a trademark of Etsy, Inc.</p>
+  </footer>
+
+  <dialog class="dialog" id="results-dialog" aria-labelledby="results-title">
+    <form method="dialog" class="dialog-close-form"><button class="dialog-x" aria-label="Close">×</button></form>
+    <div id="results-body"></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
