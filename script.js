@@ -13,7 +13,7 @@
     // and copy the web address inside action="...". It looks like:
     // https://app.kit.com/forms/1234567/subscriptions
     // While this is empty, the email box still appears but nothing is sent to Kit.
-    kitFormAction: '',
+    kitFormAction: 'https://app.kit.com/forms/10037836/subscriptions',
 
     // Name of a custom field in Kit that records whether someone ticked
     // "Email me tips and Listverdict updates". Create a custom field with this exact
